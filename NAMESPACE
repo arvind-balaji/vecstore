@@ -2,6 +2,10 @@
 
 export(add_item_knn)
 export(cosine_similarity)
+export(create_index_hnsw)
 export(create_index_knn)
 export(euclidean_distance)
 export(find_knn)
+export(test)
+importFrom(Rcpp,evalCpp)
+useDynLib(vecstore, .registration=TRUE)

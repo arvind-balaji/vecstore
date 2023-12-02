@@ -9,6 +9,7 @@
 #' @examples
 #' index <- create_index_knn(3)
 create_index_knn <- function(dim) {
+  print(test())
   return(list(data = matrix(nrow = 0, ncol = dim)))
 }
 
@@ -47,3 +48,25 @@ find_knn <- function(index, q, k = 5) {
   indices <- order(distances)[1:k]
   return(indices)
 }
+
+
+#' Find k Nearest Neighbors (kNN)
+#'
+#' This function finds the k nearest neighbors to a query vector within the index.
+#'
+#' @param index The index containing the data points.
+#' @param q The query vector for which neighbors are to be found.
+#' @param k The number of nearest neighbors to find (default is 5).
+#' @return Indices of the k nearest neighbors.
+#' @export
+#'
+#' @examples
+#' index <- create_index_knn(3)
+#' index <- add_item_knn(index, c(1, 2, 3))
+#' I <- find_knn(index, c(2, 3, 4), k = 2)
+test <- function(index, q, k = 5) {
+
+}
+
+
+
