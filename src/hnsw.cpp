@@ -2,42 +2,101 @@
 #include <hnswlib.h>
 
 using namespace Rcpp;
+#include <algorithm>
 
-//' Create an HNSW index
-//'
-//' This function initializes an empty index for HNSW search with a specified dimension and max size.
-//'
-//' @param dim The dimension of the feature space.
-//' @param max_size The maximum capacity of the index
-//' @return A list containing an initialized index with an empty data matrix.
+
+
 hnswlib::HierarchicalNSW<float>* create_index_hnsw_cpp(int dim, int max_size) {
-  int M = 16;                 // Tightly connected with internal dimensionality of the data
-  // strongly affects the memory consumption
-  int ef_construction = 200;  // Controls index search speed/build speed tradeoff
+  int M = 16;
+  int ef_construction = 200;
 
-  // Initing index
   hnswlib::L2Space space(dim);
   hnswlib::HierarchicalNSW<float>* alg_hnsw = new hnswlib::HierarchicalNSW<float>(&space, max_size, M, ef_construction);
+
+  // float* data = new float[8] {0, 0, 0, 0, 5, 5, 5, 5};
+  //
+  // alg_hnsw->addPoint(data, 0);
+  // alg_hnsw->addPoint(data + 4, 1);
+  //
+  // std::cout << alg_hnsw->getCurrentElementCount() << std::endl;
+
   return alg_hnsw;
 }
 
-// Can't automatically wrap function as compileAttributes() can not include external headers
-// https://stackoverflow.com/questions/18438291/building-packages-with-rcpp-attributes-not-handled-correctly
+void add_item_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVector data, int label) {
+  float* data_copy = new float[4];
 
-//' Create an HNSW index
-//'
-//' This function initializes an empty index for HNSW search with a specified dimension and max size.
-//'
-//' @param dim The dimension of the feature space.
-//' @param max_size The maximum capacity of the index
-//' @return A list containing an initialized index with an empty data matrix.
-//' @export
-// [[Rcpp::export]]
-SEXP create_index_hnsw(int dim, int max_size) {
-  hnswlib::HierarchicalNSW<float>* index = create_index_hnsw_cpp(dim, max_size);
+  for (int i=0; i<4; i++) {
+    data_copy[i] = (float) data[i];
+    std::cout << data_copy[i] << std::endl;
+  }
 
-  // Wrap the pointer in an R external pointer (XPtr)
-  Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> xptr(index, true);
-  return xptr;
+  index->addPoint(data_copy, label);
 }
 
+IntegerVector find_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVector q, int k) {
+  float* data = new float[4];
+
+  for (int i=0; i<4; i++) {
+    data[i] = (float) q[i];
+    std::cout << data[i] << std::endl;
+  }
+  std::cout << "foo" << std::endl;
+  std::priority_queue<std::pair<float, hnswlib::labeltype>> result = index->searchKnn(data, k);
+
+
+  IntegerVector indices(k);
+
+  // Retrieve the top k indices from the priority queue
+  for (int i = 0; i < k && !result.empty(); ++i) {
+    indices[i] = result.top().second;
+    result.pop();
+  }
+
+  return indices;
+}
+
+//' @export
+// [[Rcpp::export]]
+SEXP create_index_hnsw(int dim, int max_size){
+  hnswlib::HierarchicalNSW<float>* index = create_index_hnsw_cpp(dim, max_size);
+  Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> x_ptr(index, true);
+  return x_ptr;
+}
+
+//' @export
+// [[Rcpp::export]]
+void validate_index_hnsw(SEXP index){
+  Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> index_ptr(index);
+  index_ptr->checkIntegrity();
+  std::cout << index_ptr->getCurrentElementCount() << std::endl;
+  std::cout << index_ptr << std::endl;
+}
+
+
+//' @export
+// [[Rcpp::export]]
+void add_item_hnsw(SEXP ptr, NumericVector data, int label) {
+  std::cout << ptr << std::endl;
+  // std::vector<float> item_copy(data.size());
+  // std::copy(data.begin(), data.end(), item_copy.begin());
+  // // Retrieve the pointer from the external pointer (XPtr)
+  Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> index_ptr(ptr);
+  std::cout << index_ptr->getCurrentElementCount() << std::endl;
+
+  // // Call the C++ function using the retrieved pointer
+  add_item_hnsw_cpp(index_ptr, data, label);
+}
+
+//' @export
+// [[Rcpp::export]]
+IntegerVector find_hnsw(SEXP ptr, NumericVector q, int k) {
+   std::cout << ptr << std::endl;
+   // std::vector<float> item_copy(data.size());
+   // std::copy(data.begin(), data.end(), item_copy.begin());
+   // // Retrieve the pointer from the external pointer (XPtr)
+   Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> index_ptr(ptr);
+
+   // // Call the C++ function using the retrieved pointer
+   return find_hnsw_cpp(index_ptr, q, k);
+ }

@@ -23,9 +23,47 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// validate_index_hnsw
+void validate_index_hnsw(SEXP index);
+RcppExport SEXP _vecstore_validate_index_hnsw(SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type index(indexSEXP);
+    validate_index_hnsw(index);
+    return R_NilValue;
+END_RCPP
+}
+// add_item_hnsw
+void add_item_hnsw(SEXP ptr, NumericVector data, int label);
+RcppExport SEXP _vecstore_add_item_hnsw(SEXP ptrSEXP, SEXP dataSEXP, SEXP labelSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type ptr(ptrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< int >::type label(labelSEXP);
+    add_item_hnsw(ptr, data, label);
+    return R_NilValue;
+END_RCPP
+}
+// find_hnsw
+IntegerVector find_hnsw(SEXP ptr, NumericVector q, int k);
+RcppExport SEXP _vecstore_find_hnsw(SEXP ptrSEXP, SEXP qSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type ptr(ptrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_hnsw(ptr, q, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vecstore_create_index_hnsw", (DL_FUNC) &_vecstore_create_index_hnsw, 2},
+    {"_vecstore_validate_index_hnsw", (DL_FUNC) &_vecstore_validate_index_hnsw, 1},
+    {"_vecstore_add_item_hnsw", (DL_FUNC) &_vecstore_add_item_hnsw, 3},
+    {"_vecstore_find_hnsw", (DL_FUNC) &_vecstore_find_hnsw, 3},
     {NULL, NULL, 0}
 };
 
