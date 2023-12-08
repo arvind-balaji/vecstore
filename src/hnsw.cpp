@@ -2,23 +2,13 @@
 #include <hnswlib.h>
 
 using namespace Rcpp;
-#include <algorithm>
-
-
 
 hnswlib::HierarchicalNSW<float>* create_index_hnsw_cpp(int dim, int max_size) {
   int M = 16;
   int ef_construction = 200;
 
-  hnswlib::L2Space space(dim);
-  hnswlib::HierarchicalNSW<float>* alg_hnsw = new hnswlib::HierarchicalNSW<float>(&space, max_size, M, ef_construction);
-
-  // float* data = new float[8] {0, 0, 0, 0, 5, 5, 5, 5};
-  //
-  // alg_hnsw->addPoint(data, 0);
-  // alg_hnsw->addPoint(data + 4, 1);
-  //
-  // std::cout << alg_hnsw->getCurrentElementCount() << std::endl;
+  hnswlib::L2Space* space = new hnswlib::L2Space(dim);
+  hnswlib::HierarchicalNSW<float>* alg_hnsw = new hnswlib::HierarchicalNSW<float>(space, max_size, M, ef_construction);
 
   return alg_hnsw;
 }
@@ -53,6 +43,7 @@ IntegerVector find_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVecto
     result.pop();
   }
 
+  std::reverse(indices.begin(), indices.end());
   return indices;
 }
 
