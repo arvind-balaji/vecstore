@@ -18,7 +18,6 @@ void add_item_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVector dat
 
   for (int i=0; i<4; i++) {
     data_copy[i] = (float) data[i];
-    std::cout << data_copy[i] << std::endl;
   }
 
   index->addPoint(data_copy, label);
@@ -29,15 +28,12 @@ IntegerVector find_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVecto
 
   for (int i=0; i<4; i++) {
     data[i] = (float) q[i];
-    std::cout << data[i] << std::endl;
   }
-  std::cout << "foo" << std::endl;
-  std::priority_queue<std::pair<float, hnswlib::labeltype>> result = index->searchKnn(data, k);
 
+  std::priority_queue<std::pair<float, hnswlib::labeltype>> result = index->searchKnn(data, k);
 
   IntegerVector indices(k);
 
-  // Retrieve the top k indices from the priority queue
   for (int i = 0; i < k && !result.empty(); ++i) {
     indices[i] = result.top().second;
     result.pop();
@@ -47,7 +43,16 @@ IntegerVector find_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVecto
   return indices;
 }
 
+//' Create an index for hierarchical navigable small worlds (HNSW) search
+//'
+//' This function initializes an empty index for HNSW search with a specified dimension.
+//'
+//' @param dim The dimension of the feature space.
+//' @return A list containing an initialized index with an empty data matrix.
 //' @export
+//'
+//' @examples
+//' index <- create_index_hnsw(3, 16)
 // [[Rcpp::export]]
 SEXP create_index_hnsw(int dim, int max_size){
   hnswlib::HierarchicalNSW<float>* index = create_index_hnsw_cpp(dim, max_size);
@@ -55,39 +60,41 @@ SEXP create_index_hnsw(int dim, int max_size){
   return x_ptr;
 }
 
+//' Add a data point to the index
+//'
+//' This function appends a new data point to the existing kNN index.
+//'
+//' @param index The index to which the data will be added.
+//' @param data A vector of length (\code{dim}) to be added to the index.
+//' @param label The corresponding scalar label for the data point.
+//' @return Returns `NULL`
 //' @export
+//'
+//' @examples
+//' index <- create_index_hnsw(3, 16)
+//' add_hnsw(index, c(1, 2, 3), 1)
 // [[Rcpp::export]]
-void validate_index_hnsw(SEXP index){
-  Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> index_ptr(index);
-  index_ptr->checkIntegrity();
-  std::cout << index_ptr->getCurrentElementCount() << std::endl;
-  std::cout << index_ptr << std::endl;
-}
-
-
-//' @export
-// [[Rcpp::export]]
-void add_item_hnsw(SEXP ptr, NumericVector data, int label) {
-  std::cout << ptr << std::endl;
-  // std::vector<float> item_copy(data.size());
-  // std::copy(data.begin(), data.end(), item_copy.begin());
-  // // Retrieve the pointer from the external pointer (XPtr)
+void add_hnsw(SEXP ptr, NumericVector data, int label) {
   Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> index_ptr(ptr);
-  std::cout << index_ptr->getCurrentElementCount() << std::endl;
-
-  // // Call the C++ function using the retrieved pointer
   add_item_hnsw_cpp(index_ptr, data, label);
 }
 
+//' Search for top K nearest neighbors
+//'
+//' This function finds the k nearest neighbors to a query vector within the index.
+//'
+//' @param index The index containing the data points.
+//' @param q The query vector of length (\code{dim}) for which neighbors are to be found.
+//' @param k The number of nearest neighbors to find.
+//' @return Indices of the k nearest neighbors.
 //' @export
+//'
+//' @examples
+//' index <- create_index_hnsw(3, 16)
+//' add_hnsw(index, c(1, 2, 3), 1)
+//' I <- find_hnsw(index, c(2, 3, 4), k = 1)
 // [[Rcpp::export]]
 IntegerVector find_hnsw(SEXP ptr, NumericVector q, int k) {
-   std::cout << ptr << std::endl;
-   // std::vector<float> item_copy(data.size());
-   // std::copy(data.begin(), data.end(), item_copy.begin());
-   // // Retrieve the pointer from the external pointer (XPtr)
    Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> index_ptr(ptr);
-
-   // // Call the C++ function using the retrieved pointer
    return find_hnsw_cpp(index_ptr, q, k);
  }

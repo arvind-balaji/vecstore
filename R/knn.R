@@ -9,11 +9,10 @@
 #' @examples
 #' index <- create_index_knn(3)
 create_index_knn <- function(dim) {
-  print(test())
   return(list(data = matrix(nrow = 0, ncol = dim)))
 }
 
-#' Add an item to the kNN index
+#' Add a data point to the index
 #'
 #' This function appends a new data point to the existing kNN index.
 #'
@@ -24,24 +23,24 @@ create_index_knn <- function(dim) {
 #'
 #' @examples
 #' index <- create_index_knn(3)
-#' index <- add_item_knn(index, c(1, 2, 3))
-add_item_knn <- function(index, data) {
+#' index <- add_knn(index, c(1, 2, 3))
+add_knn <- function(index, data) {
   return(list(data = rbind(index$data, data)))
 }
 
-#' Find k Nearest Neighbors (kNN)
+#' Search for top K nearest neighbors
 #'
 #' This function finds the k nearest neighbors to a query vector within the index.
 #'
 #' @param index The index containing the data points.
-#' @param q The query vector for which neighbors are to be found.
-#' @param k The number of nearest neighbors to find (default is 5).
+#' @param q The query vector of length (\code{dim}) for which neighbors are to be found.
+#' @param k The number of nearest neighbors to find.
 #' @return Indices of the k nearest neighbors.
 #' @export
 #'
 #' @examples
 #' index <- create_index_knn(3)
-#' index <- add_item_knn(index, c(1, 2, 3))
+#' index <- add_knn(index, c(1, 2, 3))
 #' I <- find_knn(index, c(2, 3, 4), k = 2)
 find_knn <- function(index, q, k = 5) {
   distances <- apply(index$data, 1, function(row) euclidean_distance(q, row))
@@ -50,23 +49,34 @@ find_knn <- function(index, q, k = 5) {
 }
 
 
-#' Find k Nearest Neighbors (kNN)
+#' @title R6 class representing a k-Nearest Neighbors (kNN) Index
 #'
-#' This function finds the k nearest neighbors to a query vector within the index.
+#' @description kNN Index is used for nearest neighbor search based on provided data points.
 #'
-#' @param index The index containing the data points.
-#' @param q The query vector for which neighbors are to be found.
-#' @param k The number of nearest neighbors to find (default is 5).
-#' @return Indices of the k nearest neighbors.
 #' @export
-#'
-#' @examples
-#' index <- create_index_knn(3)
-#' index <- add_item_knn(index, c(1, 2, 3))
-#' I <- find_knn(index, c(2, 3, 4), k = 2)
-test <- function(index, q, k = 5) {
+#' @importFrom R6 R6Class
+KNNIndex <- R6::R6Class(
+  "KNNIndex",
+  public = list(
+    index = NULL,
+    dim = NA,
+    initialize = function(dim = NA) {
+      self$dim <- dim
+      self$index <- create_index_knn(dim)
+    },
 
-}
+    #' @description Add a data point to the index
+    #' @param data A vector of length (\code{dim}) to be added to the index.
+    add = function(data) {
+      self$index <- add_knn(self$index, data)
+    },
 
-
+    #' @description Search for top K nearest neighbors
+    #' @param q The query of vector of length (\code{dim})
+    #' @param k Number of results to return
+    find = function(q, k) {
+      find_knn(self$index, q, k)
+    }
+  )
+)
 
