@@ -2,6 +2,7 @@
 
 export(HNSWIndex)
 export(KNNIndex)
+export(VectorStore)
 export(add_hnsw)
 export(add_knn)
 export(cosine_similarity)
