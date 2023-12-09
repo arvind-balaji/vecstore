@@ -18,13 +18,16 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/arvind-balaji/vecstore/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/arvind-balaji/vecstore/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/arvind-balaji/vecstore/branch/main/graph/badge.svg)](https://app.codecov.io/gh/arvind-balaji/vecstore?branch=main)
 <!-- badges: end -->
 
 The goal of vecstore is to provide a high performance data structure for vector similarity search. It introduces `VectorStore`, allowing for the insertion of data paired with corresponding vectors enabling efficient retrieval of elements based on similarity to a query vector.
 
-Ideal for machine learning applications that require fast lookup on embeddings.
+Ideal for machine learning applications that require fast look ups over embeddings.
 
 Additionally, vecstore exposes two vector index implementations:
+
 - `HNSWIndex`: Utilizes the [Hierarchical Navigable Small World](https://doi.org/10.48550/arXiv.1603.09320) algorithm, implemented through the [hnswlib](https://github.com/nmslib/hnswlib) C++ library, for highly efficient nearest neighbor searches.
 - `KNNIndex`: Utilizes naive exhaustive searches to retrieve the exact K nearest neighbors to a query.
 
@@ -33,30 +36,94 @@ Additionally, vecstore exposes two vector index implementations:
 You can install the development version of vecstore like so:
 
 ``` r
-install_github(https://github.com/arvind-balaji/vecstore)
+install_github("https://github.com/arvind-balaji/vecstore")
 ```
 
 ## Example
 
+Basic example of utilizing `VectorStore` with `dim = 3`.
 
 
-```{r example}
+```{r vecstore_ex}
 library(vecstore)
 
+dim <- 3
+
+store <- VectorStore$new(dim)
+
+store$add(c(10, 10, 10), list("A"))
+store$add(c(38, 18, 40), list("B"))
+store$add(c(10, 20, 30), list("C"))
+store$add(c(90, 70, 15), list("D"))
+
+query <- c(91, 68, 10)
+k <- 3
+store$find(query, k)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
+Utilizing vector indexes directly to retrieve indices of similar items. We expect the `sample_id` to be the top result. 
+
+
+```{r index_ex}
+library(vecstore)
+
+data <- as.matrix(iris[, -5])
+
+dim = ncol(data)
+n = nrow(data)
+
+knn <- KNNIndex$new(dim)
+hnsw <- HNSWIndex$new(dim, n)
+
+for (i in 1:nrow(data)) {
+  knn$add(data[i,])
+  hnsw$add(data[i,])
+}
+
+sample_id <- 8
+k <- 3
+knn$find(data[sample_id,], k)
+hnsw$find(data[sample_id,], k)
+
+sample_id <- 9
+knn$find(data[sample_id,], k)
+hnsw$find(data[sample_id,], k)
+```
+## Benchmarks
+
+The HNSW based index offer dramatic speed up over the brute force approach.
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+```{r index_benchmark}
+library(vecstore)
+library(microbenchmark)
 
-You can also embed plots, for example:
+data <- as.matrix(iris[, -5])
+dim = ncol(data)
+n = nrow(data)
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+knn <- KNNIndex$new(dim)
+hnsw <- HNSWIndex$new(dim, n)
+
+for (i in 1:nrow(data)) {
+  knn$add(data[i,])
+  hnsw$add(data[i,])
+}
+
+microbenchmark(knn$find(data[10,], 5), hnsw$find(data[10,], 5), times=100L)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+
+<!-- You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. -->
+
+<!-- You can also embed plots, for example: -->
+
+<!-- ```{r pressure, echo = FALSE} -->
+<!-- plot(pressure) -->
+<!-- ``` -->
+
+<!-- In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN. -->

@@ -8,6 +8,7 @@ VectorStore <- R6::R6Class(
     index = NULL,
     dim = NA,
     data = NULL,
+    size = 0,
     initialize = function(dim = NA) {
       self$dim <- dim
       self$index <- KNNIndex$new(dim)
@@ -23,6 +24,7 @@ VectorStore <- R6::R6Class(
       }
       self$index$add(vector)
       self$data <- c(self$data, list(non_vector_data))
+      self$size = self$size + 1
     },
 
     #' @description Search for top K nearest neighbors and return corresponding indexes and non-vector data
@@ -33,7 +35,7 @@ VectorStore <- R6::R6Class(
       if (length(q) != self$dim) {
         stop("Query dimension does not match data dimension.")
       }
-      if (k > self$index$label - 1) {
+      if (k > self$size) {
         stop("Not enough data to retrive k documents.")
       }
       indices <- self$index$find(q, k)

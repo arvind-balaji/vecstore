@@ -2,9 +2,9 @@
 % Please edit documentation in R/vectorstore.R
 \name{VectorStore}
 \alias{VectorStore}
-\title{VectorStore class using KNNIndex}
+\title{VectorStore class using HNSWIndex}
 \description{
-VectorStore class for storing vectors and non-vector data using KNNIndex.
+VectorStore class for storing vector and non-vector data using HNSWIndex
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -62,7 +62,7 @@ Search for top K nearest neighbors and return corresponding indexes and non-vect
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A data frame containing indexes of the k nearest neighbors and their corresponding non-vector data.
+A (q x p) data frame containing indexes of the k nearest neighbors and their corresponding non-vector data.
 }
 }
 \if{html}{\out{<hr>}}
