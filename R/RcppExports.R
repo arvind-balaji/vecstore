@@ -6,6 +6,7 @@
 #' This function initializes an empty index for HNSW search with a specified dimension.
 #'
 #' @param dim The dimension of the feature space.
+#' @param max_size The dimension of the feature space.
 #' @return A list containing an initialized index with an empty data matrix.
 #' @export
 #'
@@ -19,7 +20,7 @@ create_index_hnsw <- function(dim, max_size) {
 #'
 #' This function appends a new data point to the existing kNN index.
 #'
-#' @param index The index to which the data will be added.
+#' @param ptr The index to which the data will be added.
 #' @param data A vector of length (\code{dim}) to be added to the index.
 #' @param label The corresponding scalar label for the data point.
 #' @return Returns `NULL`
@@ -36,7 +37,7 @@ add_hnsw <- function(ptr, data, label) {
 #'
 #' This function finds the k nearest neighbors to a query vector within the index.
 #'
-#' @param index The index containing the data points.
+#' @param ptr The index containing the data points.
 #' @param q The query vector of length (\code{dim}) for which neighbors are to be found.
 #' @param k The number of nearest neighbors to find.
 #' @return Indices of the k nearest neighbors.

@@ -5,7 +5,6 @@
 #' @param vec1 The first vector.
 #' @param vec2 The second vector.
 #' @return The Euclidean distance between the two input vectors.
-#' @export
 #'
 #' @examples
 #' euclidean_distance(c(1, 2, 3), c(4, 5, 6))
@@ -20,7 +19,6 @@ euclidean_distance <- function(vec1, vec2) {
 #' @param vec1 The first vector.
 #' @param vec2 The second vector.
 #' @return The cosine similarity between the two input vectors.
-#' @export
 #'
 #' @examples
 #' cosine_similarity(c(1, 2, 3), c(4, 5, 6))

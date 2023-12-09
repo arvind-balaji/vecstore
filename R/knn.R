@@ -58,8 +58,16 @@ find_knn <- function(index, q, k = 5) {
 KNNIndex <- R6::R6Class(
   "KNNIndex",
   public = list(
-    index = NULL,
+    #' @field dim
+    #' The dimension of the vectors to be indexed.
     dim = NA,
+
+    #' @field size
+    #' The current number of elements in the index.
+    size = NA,
+
+    #' @description Create a new KNN vector index.
+    #' @param dim The dimension of the vectors to be indexed.
     initialize = function(dim = NA) {
       self$dim <- dim
       self$index <- create_index_knn(dim)
@@ -69,6 +77,7 @@ KNNIndex <- R6::R6Class(
     #' @param data A vector of length (\code{dim}) to be added to the index.
     add = function(data) {
       self$index <- add_knn(self$index, data)
+      si
     },
 
     #' @description Search for top K nearest neighbors
@@ -77,6 +86,9 @@ KNNIndex <- R6::R6Class(
     find = function(q, k) {
       find_knn(self$index, q, k)
     }
+  ),
+  private = list(
+    index = NULL
   )
 )
 

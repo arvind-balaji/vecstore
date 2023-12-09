@@ -48,13 +48,16 @@ Basic example of utilizing `VectorStore` with `dim = 3`.
 library(vecstore)
 
 dim <- 3
+max_size <- 1024
+index <- HNSWIndex$new(dim = dim, size = max_size)
+# KNNIndex does not require a max size.
+# index <- KNNIndex$new(dim = dim)
+store <- VectorStore$new(index)
 
-store <- VectorStore$new(dim)
-
-store$add(c(10, 10, 10), list("A"))
-store$add(c(38, 18, 40), list("B"))
-store$add(c(10, 20, 30), list("C"))
-store$add(c(90, 70, 15), list("D"))
+store$add(c(10, 10, 10), list(label = "A"))
+store$add(c(38, 18, 40), list(label = "B"))
+store$add(c(10, 20, 30), list(label = "C"))
+store$add(c(90, 70, 15), list(label = "D"))
 
 query <- c(91, 68, 10)
 k <- 3

@@ -1,17 +1,17 @@
-#' @title VectorStore class using HNSWIndex
-#' @description VectorStore class for storing vector and non-vector data using HNSWIndex
+#' @title VectorStore class.
+#' @description VectorStore class for storing vector and non-vector data.
 #' @export
 #' @importFrom R6 R6Class
 VectorStore <- R6::R6Class(
   "VectorStore",
   public = list(
-    index = NULL,
-    dim = NA,
-    data = NULL,
+    #' @field size
+    #' The current number of elements in the vector store.
     size = 0,
-    initialize = function(dim = NA) {
-      self$dim <- dim
-      self$index <- KNNIndex$new(dim)
+    #' @description Initialize a new vector store.
+    #' @param index A vector index, either \code{HNSWIndex} or \code{KNNIndex}.
+    initialize = function(index = NULL) {
+      self$index <- index
       self$data <- list()
     },
 
@@ -19,7 +19,7 @@ VectorStore <- R6::R6Class(
     #' @param vector A vector of length (\code{dim}) to be added to the index.
     #' @param non_vector_data A list of non-vector data corresponding to the vector.
     add = function(vector, non_vector_data) {
-      if (length(vector) != self$dim) {
+      if (length(vector) != self$index$dim) {
         stop("Vector dimension does not match data dimension.")
       }
       self$index$add(vector)
@@ -32,7 +32,7 @@ VectorStore <- R6::R6Class(
     #' @param k Number of nearest neighbors to find.
     #' @return A (q x p) data frame containing indexes of the k nearest neighbors and their corresponding non-vector data.
     find = function(q, k) {
-      if (length(q) != self$dim) {
+      if (length(q) != self$index$dim) {
         stop("Query dimension does not match data dimension.")
       }
       if (k > self$size) {
@@ -45,5 +45,9 @@ VectorStore <- R6::R6Class(
       row.names(df) <- NULL
       return(df)
     }
+  ),
+  private = list(
+    data = NULL,
+    index = NULL
   )
 )

@@ -6,6 +6,17 @@
 \description{
 HNSW Index is used for nearest neighbor search based on provided data points.
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{index}}{The dimension of the vectors to be indexed.}
+
+\item{\code{dim}}{The dimension of the vectors to be indexed.}
+
+\item{\code{size}}{The max capacity of the index.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -19,10 +30,20 @@ HNSW Index is used for nearest neighbor search based on provided data points.
 \if{html}{\out{<a id="method-HNSWIndex-new"></a>}}
 \if{latex}{\out{\hypertarget{method-HNSWIndex-new}{}}}
 \subsection{Method \code{new()}}{
+Create a new HNSW vector index.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{HNSWIndex$new(dim = NA, size = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dim}}{The dimension of the vectors to be indexed.}
+
+\item{\code{size}}{The max capacity of the index.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-HNSWIndex-add"></a>}}

@@ -8,6 +8,8 @@ create_index_hnsw(dim, max_size)
 }
 \arguments{
 \item{dim}{The dimension of the feature space.}
+
+\item{max_size}{The dimension of the feature space.}
 }
 \value{
 A list containing an initialized index with an empty data matrix.

@@ -6,6 +6,15 @@
 \description{
 kNN Index is used for nearest neighbor search based on provided data points.
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{dim}}{The dimension of the vectors to be indexed.}
+
+\item{\code{size}}{The current number of elements in the index.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -19,10 +28,18 @@ kNN Index is used for nearest neighbor search based on provided data points.
 \if{html}{\out{<a id="method-KNNIndex-new"></a>}}
 \if{latex}{\out{\hypertarget{method-KNNIndex-new}{}}}
 \subsection{Method \code{new()}}{
+Create a new KNN vector index.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{KNNIndex$new(dim = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dim}}{The dimension of the vectors to be indexed.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-KNNIndex-add"></a>}}

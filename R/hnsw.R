@@ -10,10 +10,21 @@
 HNSWIndex <- R6::R6Class(
   "HNSWIndex",
   public = list(
+    #' @field index
+    #' The dimension of the vectors to be indexed.
     index = NULL,
+
+    #' @field dim
+    #' The dimension of the vectors to be indexed.
     dim = NA,
+
+    #' @field size
+    #' The max capacity of the index.
     size = NA,
-    label = 1,
+
+    #' @description Create a new HNSW vector index.
+    #' @param dim The dimension of the vectors to be indexed.
+    #' @param size The max capacity of the index.
     initialize = function(dim = NA, size = NA) {
       self$dim <- dim
       self$size <- size
@@ -33,5 +44,8 @@ HNSWIndex <- R6::R6Class(
     find = function(q, k) {
       find_hnsw(self$index, q, k)
     }
+  ),
+  private = list(
+    label = 1
   )
 )

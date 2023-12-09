@@ -7,7 +7,7 @@ hnswlib::HierarchicalNSW<float>* create_index_hnsw_cpp(int dim, int max_size) {
   int M = 16;
   int ef_construction = 200;
 
-  hnswlib::InnerProductSpace* space = new hnswlib::InnerProductSpace(dim);
+  hnswlib::L2Space* space = new hnswlib::L2Space(dim);
   hnswlib::HierarchicalNSW<float>* alg_hnsw = new hnswlib::HierarchicalNSW<float>(space, max_size, M, ef_construction);
 
   return alg_hnsw;
@@ -48,6 +48,7 @@ IntegerVector find_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVecto
 //' This function initializes an empty index for HNSW search with a specified dimension.
 //'
 //' @param dim The dimension of the feature space.
+//' @param max_size The dimension of the feature space.
 //' @return A list containing an initialized index with an empty data matrix.
 //' @export
 //'
@@ -64,7 +65,7 @@ SEXP create_index_hnsw(int dim, int max_size){
 //'
 //' This function appends a new data point to the existing kNN index.
 //'
-//' @param index The index to which the data will be added.
+//' @param ptr The index to which the data will be added.
 //' @param data A vector of length (\code{dim}) to be added to the index.
 //' @param label The corresponding scalar label for the data point.
 //' @return Returns `NULL`
@@ -83,7 +84,7 @@ void add_hnsw(SEXP ptr, NumericVector data, int label) {
 //'
 //' This function finds the k nearest neighbors to a query vector within the index.
 //'
-//' @param index The index containing the data points.
+//' @param ptr The index containing the data points.
 //' @param q The query vector of length (\code{dim}) for which neighbors are to be found.
 //' @param k The number of nearest neighbors to find.
 //' @return Indices of the k nearest neighbors.
