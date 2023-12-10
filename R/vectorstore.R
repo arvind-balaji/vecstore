@@ -39,9 +39,7 @@ VectorStore <- R6::R6Class(
         stop("Not enough data to retrive k documents.")
       }
       indices <- private$index$find(q, k)
-      print(indices)
       non_vector_data <- lapply(private$data[indices], function(item) unlist(item))
-      print(private$data)
       df <- as.data.frame(do.call(rbind, non_vector_data))
       df$Index <- indices
       row.names(df) <- NULL

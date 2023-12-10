@@ -11,7 +11,7 @@ kNN Index is used for nearest neighbor search based on provided data points.
 \describe{
 \item{\code{dim}}{The dimension of the vectors to be indexed.}
 
-\item{\code{size}}{The current number of elements in the index.}
+\item{\code{size}}{The max capacity of the index.}
 }
 \if{html}{\out{</div>}}
 }
