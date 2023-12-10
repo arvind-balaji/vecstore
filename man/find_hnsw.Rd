@@ -7,11 +7,11 @@
 find_hnsw(ptr, q, k)
 }
 \arguments{
+\item{ptr}{The index containing the data points.}
+
 \item{q}{The query vector of length (\code{dim}) for which neighbors are to be found.}
 
 \item{k}{The number of nearest neighbors to find.}
-
-\item{index}{The index containing the data points.}
 }
 \value{
 Indices of the k nearest neighbors.

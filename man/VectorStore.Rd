@@ -2,9 +2,16 @@
 % Please edit documentation in R/vectorstore.R
 \name{VectorStore}
 \alias{VectorStore}
-\title{VectorStore class using HNSWIndex}
+\title{VectorStore class.}
 \description{
-VectorStore class for storing vector and non-vector data using HNSWIndex
+VectorStore class for storing vector and non-vector data.
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{size}}{The current number of elements in the vector store.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -19,10 +26,18 @@ VectorStore class for storing vector and non-vector data using HNSWIndex
 \if{html}{\out{<a id="method-VectorStore-new"></a>}}
 \if{latex}{\out{\hypertarget{method-VectorStore-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize a new vector store.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VectorStore$new(dim = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{VectorStore$new(index = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{index}}{A vector index, either \code{HNSWIndex} or \code{KNNIndex}.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-VectorStore-add"></a>}}

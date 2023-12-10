@@ -7,11 +7,11 @@
 add_hnsw(ptr, data, label)
 }
 \arguments{
+\item{ptr}{The index to which the data will be added.}
+
 \item{data}{A vector of length (\code{dim}) to be added to the index.}
 
 \item{label}{The corresponding scalar label for the data point.}
-
-\item{index}{The index to which the data will be added.}
 }
 \value{
 Returns \code{NULL}
