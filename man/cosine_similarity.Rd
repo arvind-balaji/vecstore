@@ -17,6 +17,3 @@ The cosine similarity between the two input vectors.
 \description{
 This function computes the cosine similarity between two vectors.
 }
-\examples{
-cosine_similarity(c(1, 2, 3), c(4, 5, 6))
-}

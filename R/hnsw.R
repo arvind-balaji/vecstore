@@ -34,8 +34,8 @@ HNSWIndex <- R6::R6Class(
     #' @description Add a data point to the index
     #' @param data A vector of length (\code{dim}) to be added to the index.
     add = function(data) {
-      add_hnsw(self$index, data, self$label)
-      self$label = self$label + 1
+      add_hnsw(self$index, data, private$label)
+      private$label = private$label + 1
     },
 
     #' @description Search for top K nearest neighbors

@@ -17,6 +17,3 @@ The Euclidean distance between the two input vectors.
 \description{
 This function computes the Euclidean distance between two vectors.
 }
-\examples{
-euclidean_distance(c(1, 2, 3), c(4, 5, 6))
-}
