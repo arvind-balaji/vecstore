@@ -25,10 +25,12 @@ HNSWIndex <- R6::R6Class(
     #' @description Create a new HNSW vector index.
     #' @param dim The dimension of the vectors to be indexed.
     #' @param size The max capacity of the index.
-    initialize = function(dim = NA, size = NA) {
+    #' @param M  Parameter that defines the maximum number of outgoing connections in the graph.
+    #' @param ef_construction Parameter that controls speed/accuracy trade-off during the index construction.
+    initialize = function(dim = NA, size = NA, M = 16, ef_construction = 100) {
       self$dim <- dim
       self$size <- size
-      self$index <- create_index_hnsw(dim, size)
+      self$index <- create_index_hnsw(dim, size, M, ef_construction)
     },
 
     #' @description Add a data point to the index

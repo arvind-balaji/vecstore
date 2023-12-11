@@ -4,12 +4,16 @@
 \alias{create_index_hnsw}
 \title{Create an index for hierarchical navigable small worlds (HNSW) search}
 \usage{
-create_index_hnsw(dim, max_size)
+create_index_hnsw(dim, max_size, M, ef_construction)
 }
 \arguments{
 \item{dim}{The dimension of the feature space.}
 
 \item{max_size}{The dimension of the feature space.}
+
+\item{M}{Parameter that defines the maximum number of outgoing connections in the graph.}
+
+\item{ef_construction}{Parameter that controls speed/accuracy trade-off during the index construction.}
 }
 \value{
 A list containing an initialized index with an empty data matrix.
@@ -18,5 +22,5 @@ A list containing an initialized index with an empty data matrix.
 This function initializes an empty index for HNSW search with a specified dimension.
 }
 \examples{
-index <- create_index_hnsw(3, 16)
+index <- create_index_hnsw(3, 16, 10, 200)
 }

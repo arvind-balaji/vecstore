@@ -32,7 +32,7 @@ Additionally, vecstore exposes two vector index implementations:
 You can install the development version of vecstore like so:
 
 ``` r
-install_github("https://github.com/arvind-balaji/vecstore")
+devtools::install_github("arvind-balaji/vecstore")
 ```
 
 ## Example
@@ -43,21 +43,24 @@ Basic example of utilizing `VectorStore` with `dim = 3`.
 library(vecstore)
 
 dim <- 3
+max_size <- 1024
+index <- HNSWIndex$new(dim = dim, size = max_size)
+# KNNIndex does not require a max size.
+# index <- KNNIndex$new(dim = dim)
+store <- VectorStore$new(index)
 
-store <- VectorStore$new(dim)
-
-store$add(c(10, 10, 10), list("A"))
-store$add(c(38, 18, 40), list("B"))
-store$add(c(10, 20, 30), list("C"))
-store$add(c(90, 70, 15), list("D"))
+store$add(c(10, 10, 10), list(label = "A"))
+store$add(c(38, 18, 40), list(label = "B"))
+store$add(c(10, 20, 30), list(label = "C"))
+store$add(c(90, 70, 15), list(label = "D"))
 
 query <- c(91, 68, 10)
 k <- 3
 store$find(query, k)
-#>   V1 Index
-#> 1  D     4
-#> 2  B     2
-#> 3  C     3
+#>   label Index
+#> 1     D     4
+#> 2     B     2
+#> 3     C     3
 ```
 
 Utilizing vector indexes directly to retrieve indices of similar items.
@@ -84,14 +87,29 @@ k <- 3
 knn$find(data[sample_id,], k)
 #> [1]  8 40 50
 hnsw$find(data[sample_id,], k)
-#> [1] 132 118 106
+#> [1]  8 40 50
 
 sample_id <- 9
 knn$find(data[sample_id,], k)
 #> [1]  9 39  4
 hnsw$find(data[sample_id,], k)
-#> [1] 132 118 106
+#> [1]  9 39  4
 ```
+
+## Tunable Paramaters
+
+The `HNSWIndex` constructor exposes two tuning parameters from
+[hnswlib](https://github.com/nmslib/hnswlib). Adjust based on
+utilization and data dimensionality to optimize performance.
+
+- `M`: This parameter determines the maximum number of connections a
+  point can have in the graph. A higher M value leads to a more
+  connected graph, which generally results in better recall during
+  search but may increase index build time and memory usage.
+- `ef_construction`: This parameter defines the size of the dynamic list
+  used in building the graph during index construction. A larger
+  ef_construction value typically results in a more accurate index but
+  requires more time and memory during the index construction phase.
 
 ## Benchmarks
 
@@ -116,9 +134,9 @@ for (i in 1:nrow(data)) {
 
 microbenchmark(knn$find(data[10,], 5), hnsw$find(data[10,], 5), times=100L)
 #> Unit: microseconds
-#>                      expr     min       lq      mean   median      uq      max
-#>   knn$find(data[10, ], 5) 185.648 199.6700 221.81697 209.6535 220.785 1175.634
-#>  hnsw$find(data[10, ], 5)   3.731   4.2845   6.09875   4.9610   5.986   41.902
+#>                      expr     min       lq      mean  median       uq      max
+#>   knn$find(data[10, ], 5) 180.359 190.0965 216.10526 200.121 212.4620 1359.396
+#>  hnsw$find(data[10, ], 5)   3.526   4.0180   5.12705   4.551   4.8585   18.696
 #>  neval
 #>    100
 #>    100

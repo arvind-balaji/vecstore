@@ -36,7 +36,7 @@ Additionally, vecstore exposes two vector index implementations:
 You can install the development version of vecstore like so:
 
 ``` r
-install_github("https://github.com/arvind-balaji/vecstore")
+devtools::install_github("arvind-balaji/vecstore")
 ```
 
 ## Example
@@ -93,6 +93,13 @@ sample_id <- 9
 knn$find(data[sample_id,], k)
 hnsw$find(data[sample_id,], k)
 ```
+## Tunable Paramaters
+
+The `HNSWIndex` constructor exposes two tuning parameters from [hnswlib](https://github.com/nmslib/hnswlib). Adjust based on utilization and data dimensionality to optimize performance.
+
+- `M`: This parameter determines the maximum number of connections a point can have in the graph. A higher M value leads to a more connected graph, which generally results in better recall during search but may increase index build time and memory usage.
+- `ef_construction`: This parameter defines the size of the dynamic list used in building the graph during index construction. A larger ef_construction value typically results in a more accurate index but requires more time and memory during the index construction phase.
+
 ## Benchmarks
 
 The HNSW based index offer dramatic speed up over the brute force approach.

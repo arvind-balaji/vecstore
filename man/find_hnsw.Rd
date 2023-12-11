@@ -20,7 +20,7 @@ Indices of the k nearest neighbors.
 This function finds the k nearest neighbors to a query vector within the index.
 }
 \examples{
-index <- create_index_hnsw(3, 16)
+index <- create_index_hnsw(3, 16, 10, 200)
 add_hnsw(index, c(1, 2, 3), 1)
 I <- find_hnsw(index, c(2, 3, 4), k = 1)
 }

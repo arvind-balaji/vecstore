@@ -7,13 +7,15 @@
 #'
 #' @param dim The dimension of the feature space.
 #' @param max_size The dimension of the feature space.
+#' @param M Parameter that defines the maximum number of outgoing connections in the graph.
+#' @param ef_construction Parameter that controls speed/accuracy trade-off during the index construction.
 #' @return A list containing an initialized index with an empty data matrix.
 #' @export
 #'
 #' @examples
-#' index <- create_index_hnsw(3, 16)
-create_index_hnsw <- function(dim, max_size) {
-    .Call(`_vecstore_create_index_hnsw`, dim, max_size)
+#' index <- create_index_hnsw(3, 16, 10, 200)
+create_index_hnsw <- function(dim, max_size, M, ef_construction) {
+    .Call(`_vecstore_create_index_hnsw`, dim, max_size, M, ef_construction)
 }
 
 #' Add a data point to the index
@@ -27,7 +29,7 @@ create_index_hnsw <- function(dim, max_size) {
 #' @export
 #'
 #' @examples
-#' index <- create_index_hnsw(3, 16)
+#' index <- create_index_hnsw(3, 16, 10, 200)
 #' add_hnsw(index, c(1, 2, 3), 1)
 add_hnsw <- function(ptr, data, label) {
     invisible(.Call(`_vecstore_add_hnsw`, ptr, data, label))
@@ -44,7 +46,7 @@ add_hnsw <- function(ptr, data, label) {
 #' @export
 #'
 #' @examples
-#' index <- create_index_hnsw(3, 16)
+#' index <- create_index_hnsw(3, 16, 10, 200)
 #' add_hnsw(index, c(1, 2, 3), 1)
 #' I <- find_hnsw(index, c(2, 3, 4), k = 1)
 find_hnsw <- function(ptr, q, k) {

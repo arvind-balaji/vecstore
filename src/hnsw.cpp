@@ -3,10 +3,7 @@
 
 using namespace Rcpp;
 
-hnswlib::HierarchicalNSW<float>* create_index_hnsw_cpp(int dim, int max_size) {
-  int M = 16;
-  int ef_construction = 200;
-
+hnswlib::HierarchicalNSW<float>* create_index_hnsw_cpp(int dim, int max_size, int M, int ef_construction) {
   hnswlib::L2Space* space = new hnswlib::L2Space(dim);
   hnswlib::HierarchicalNSW<float>* alg_hnsw = new hnswlib::HierarchicalNSW<float>(space, max_size, M, ef_construction);
 
@@ -49,14 +46,16 @@ IntegerVector find_hnsw_cpp(hnswlib::HierarchicalNSW<float>* index, NumericVecto
 //'
 //' @param dim The dimension of the feature space.
 //' @param max_size The dimension of the feature space.
+//' @param M Parameter that defines the maximum number of outgoing connections in the graph.
+//' @param ef_construction Parameter that controls speed/accuracy trade-off during the index construction.
 //' @return A list containing an initialized index with an empty data matrix.
 //' @export
 //'
 //' @examples
-//' index <- create_index_hnsw(3, 16)
+//' index <- create_index_hnsw(3, 16, 10, 200)
 // [[Rcpp::export]]
-SEXP create_index_hnsw(int dim, int max_size){
-  hnswlib::HierarchicalNSW<float>* index = create_index_hnsw_cpp(dim, max_size);
+SEXP create_index_hnsw(int dim, int max_size, int M, int ef_construction){
+  hnswlib::HierarchicalNSW<float>* index = create_index_hnsw_cpp(dim, max_size, M, ef_construction);
   Rcpp::XPtr<hnswlib::HierarchicalNSW<float>> x_ptr(index, true);
   return x_ptr;
 }
@@ -72,7 +71,7 @@ SEXP create_index_hnsw(int dim, int max_size){
 //' @export
 //'
 //' @examples
-//' index <- create_index_hnsw(3, 16)
+//' index <- create_index_hnsw(3, 16, 10, 200)
 //' add_hnsw(index, c(1, 2, 3), 1)
 // [[Rcpp::export]]
 void add_hnsw(SEXP ptr, NumericVector data, int label) {
@@ -91,7 +90,7 @@ void add_hnsw(SEXP ptr, NumericVector data, int label) {
 //' @export
 //'
 //' @examples
-//' index <- create_index_hnsw(3, 16)
+//' index <- create_index_hnsw(3, 16, 10, 200)
 //' add_hnsw(index, c(1, 2, 3), 1)
 //' I <- find_hnsw(index, c(2, 3, 4), k = 1)
 // [[Rcpp::export]]

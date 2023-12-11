@@ -12,14 +12,16 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // create_index_hnsw
-SEXP create_index_hnsw(int dim, int max_size);
-RcppExport SEXP _vecstore_create_index_hnsw(SEXP dimSEXP, SEXP max_sizeSEXP) {
+SEXP create_index_hnsw(int dim, int max_size, int M, int ef_construction);
+RcppExport SEXP _vecstore_create_index_hnsw(SEXP dimSEXP, SEXP max_sizeSEXP, SEXP MSEXP, SEXP ef_constructionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
     Rcpp::traits::input_parameter< int >::type max_size(max_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_index_hnsw(dim, max_size));
+    Rcpp::traits::input_parameter< int >::type M(MSEXP);
+    Rcpp::traits::input_parameter< int >::type ef_construction(ef_constructionSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_index_hnsw(dim, max_size, M, ef_construction));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -50,7 +52,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_vecstore_create_index_hnsw", (DL_FUNC) &_vecstore_create_index_hnsw, 2},
+    {"_vecstore_create_index_hnsw", (DL_FUNC) &_vecstore_create_index_hnsw, 4},
     {"_vecstore_add_hnsw", (DL_FUNC) &_vecstore_add_hnsw, 3},
     {"_vecstore_find_hnsw", (DL_FUNC) &_vecstore_find_hnsw, 3},
     {NULL, NULL, 0}

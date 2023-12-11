@@ -20,6 +20,6 @@ Returns \code{NULL}
 This function appends a new data point to the existing kNN index.
 }
 \examples{
-index <- create_index_hnsw(3, 16)
+index <- create_index_hnsw(3, 16, 10, 200)
 add_hnsw(index, c(1, 2, 3), 1)
 }

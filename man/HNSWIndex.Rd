@@ -32,7 +32,7 @@ HNSW Index is used for nearest neighbor search based on provided data points.
 \subsection{Method \code{new()}}{
 Create a new HNSW vector index.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{HNSWIndex$new(dim = NA, size = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{HNSWIndex$new(dim = NA, size = NA, M = 16, ef_construction = 100)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -41,6 +41,10 @@ Create a new HNSW vector index.
 \item{\code{dim}}{The dimension of the vectors to be indexed.}
 
 \item{\code{size}}{The max capacity of the index.}
+
+\item{\code{M}}{Parameter that defines the maximum number of outgoing connections in the graph.}
+
+\item{\code{ef_construction}}{Parameter that controls speed/accuracy trade-off during the index construction.}
 }
 \if{html}{\out{</div>}}
 }
